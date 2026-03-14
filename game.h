@@ -3,28 +3,25 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "resourceManager.h"
-#include "sprite_renderer.h"
 #include "model_renderer.h"
 
 struct Enemy {
     glm::vec2 Position;
     glm::vec2 Size;
     glm::vec2 Velocity;
-    Texture Sprite;
     bool Destroyed;
 
-    Enemy(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec2 velocity) 
-        : Position(pos), Size(size), Sprite(sprite), Velocity(velocity), Destroyed(false) {}
+    Enemy(glm::vec2 pos, glm::vec2 size, glm::vec2 velocity) 
+        : Position(pos), Size(size), Velocity(velocity), Destroyed(false) {}
 };
 
 struct Bullet {
     glm::vec2 Position;
     glm::vec2 Velocity;
-    Texture Sprite;
     bool Active;
 
-    Bullet(glm::vec2 pos, glm::vec2 vel, Texture sprite)
-        : Position(pos), Velocity(vel), Sprite(sprite), Active(true) {}
+    Bullet(glm::vec2 pos, glm::vec2 vel)
+        : Position(pos), Velocity(vel), Active(true) {}
 };
 
 struct Star {
@@ -34,7 +31,12 @@ struct Star {
     float Brightness;
 };
 
-enum GameState { MENU, PLAYING, GAME_OVER };
+enum GameState {
+    MENU,
+    PLAYING,
+    GAME_OVER,
+    GAME_WON
+};
 
 class Game {
 public:
@@ -42,17 +44,16 @@ public:
     ~Game();
 
     void Init();
-    void Update(float deltaTime);
-    void Render();
-    void Reset(); // Hàm quan trọng để sửa lỗi Restart
-
+    void InitLevel(); // Thêm hàm khởi tạo theo màn chơi
+    void Reset();
     void HandleKeyPress(unsigned char key);
     void HandleKeyRelease(unsigned char key);
+    void Update(float deltaTime);
+    void Render();
 
     GameState state;
 
 private:
-    SpriteRenderer* renderer;
     ModelRenderer* spaceshipRenderer;
     glm::vec2 playerPosition;
     glm::vec2 playerSize;
@@ -60,6 +61,9 @@ private:
     std::vector<Bullet> bullets;
     std::vector<Star> stars;
     bool keys[256]{};
+    
+    int currentLevel;
+    const int MAX_LEVEL = 3;
 };
 
 #endif

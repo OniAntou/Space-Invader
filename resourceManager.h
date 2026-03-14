@@ -25,10 +25,6 @@ public:
     static std::shared_ptr<Shader> LoadShader(const char* vShaderFile, const char* fShaderFile, std::string name);
     static std::shared_ptr<Shader> GetShader(std::string name);
 
-    // Texture: Tải và truy xuất
-    static Texture LoadTexture(const char* file, bool alpha, std::string name);
-    static Texture GetTexture(std::string name);
-
     // Giải phóng bộ nhớ
     static void Clear();
 
