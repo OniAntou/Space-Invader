@@ -1,4 +1,5 @@
 #include "model_renderer.h"
+#include <vector>
 
 ModelRenderer::ModelRenderer(Shader &shader) : shader(shader) {
     glm::mat4 projection = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
@@ -86,7 +87,6 @@ void ModelRenderer::initBulletData() {
     glBindVertexArray(0);
 }
 
-#include <vector>
 void ModelRenderer::initEnemyData() {
     // Bản đồ pixel 11x8 của Crab Alien
     const char* pattern[] = {

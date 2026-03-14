@@ -1,6 +1,5 @@
 #include "game.h"
 #include <GL/glew.h>
-#include <GL/glut.h>
 #include <iostream>
 #include <algorithm>
 #include <cstdlib> // For rand()
@@ -206,7 +205,7 @@ void Game::HandleKeyPress(unsigned char key) {
     else if (key == ' ' && state == PLAYING) {
         bullets.emplace_back(playerPosition + glm::vec2(0.0f, 0.1f), glm::vec2(0.0f, 1.5f));
     }
-    if ((key == 'r' || key == 'R') && state == GAME_OVER) {
+    if ((key == 'r' || key == 'R') && (state == GAME_OVER || state == GAME_WON)) {
         Reset();
     }
     if (key == 27) exit(0);
