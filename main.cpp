@@ -1,4 +1,4 @@
-#include <GL/glew.h> // Bắt buộc phải đặt dòng này TRƯỚC glut.h
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include "game.h"
 #include <iostream>
@@ -6,17 +6,13 @@
 Game* game;
 
 void display() {
+    // Luôn xóa buffer trước khi vẽ
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f); 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     game->Render();
+    
     glutSwapBuffers();
-}
-
-void keyboard(unsigned char key, int x, int y) {
-    game->HandleKeyPress(key);
-    glutPostRedisplay();
-}
-
-void keyboardUp(unsigned char key, int x, int y) {
-    game->HandleKeyRelease(key);
 }
 
 void idle() {
@@ -26,45 +22,37 @@ void idle() {
     lastTime = currentTime;
 
     game->Update(deltaTime);
-    glutPostRedisplay();
+    glutPostRedisplay(); // Buộc vẽ lại liên tục
 }
 
 void reshape(int w, int h) {
+    // Cập nhật khung hình khi người dùng thay đổi kích thước cửa sổ
     glViewport(0, 0, w, h);
-    // Projection is handled by shaders, no need for gluOrtho2D
 }
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Space Invader");
 
-    // BẮT BUỘC PHẢI KHỞI TẠO GLEW Ở ĐÂY
     glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        std::cerr << "GLEW Init Error: " << glewGetErrorString(err) << std::endl;
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Lỗi khởi tạo GLEW!" << std::endl;
         return -1;
     }
 
-    // Bật blending cho texture có alpha
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
+    // Khởi tạo đối tượng game sau khi đã có Context OpenGL
     game = new Game();
 
     glutDisplayFunc(display);
-    glutKeyboardFunc(keyboard);
-    glutKeyboardUpFunc(keyboardUp);
-    glutIdleFunc(idle);
     glutReshapeFunc(reshape);
-
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glutIdleFunc(idle);
+    
+    // Đăng ký nhận phím
+    glutKeyboardFunc([](unsigned char k, int x, int y) { game->HandleKeyPress(k); });
+    glutKeyboardUpFunc([](unsigned char k, int x, int y) { game->HandleKeyRelease(k); });
 
     glutMainLoop();
-
-    delete game;
     return 0;
 }
