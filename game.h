@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "resourceManager.h"
 #include "sprite_renderer.h"
+#include "model_renderer.h"
 
 struct Enemy {
     glm::vec2 Position;
@@ -26,6 +27,13 @@ struct Bullet {
         : Position(pos), Velocity(vel), Sprite(sprite), Active(true) {}
 };
 
+struct Star {
+    glm::vec2 Position;
+    float Size;
+    float Speed;
+    float Brightness;
+};
+
 enum GameState { MENU, PLAYING, GAME_OVER };
 
 class Game {
@@ -45,10 +53,12 @@ public:
 
 private:
     SpriteRenderer* renderer;
+    ModelRenderer* spaceshipRenderer;
     glm::vec2 playerPosition;
     glm::vec2 playerSize;
     std::vector<Enemy> enemies;
     std::vector<Bullet> bullets;
+    std::vector<Star> stars;
     bool keys[256]{};
 };
 

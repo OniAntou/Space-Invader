@@ -13,6 +13,7 @@
                 "${workspaceFolder}\\resourceManager.cpp",
                 "${workspaceFolder}\\shader.cpp",
                 "${workspaceFolder}\\sprite_renderer.cpp",
+                "${workspaceFolder}\\model_renderer.cpp",
                 "-o",
                 "${workspaceFolder}\\main.exe",
                 "-I",
