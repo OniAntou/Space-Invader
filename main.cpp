@@ -1,3 +1,4 @@
+#include <GL/glew.h> // Bắt buộc phải đặt dòng này TRƯỚC glut.h
 #include <GL/glut.h>
 #include "game.h"
 #include <iostream>
@@ -6,6 +7,7 @@ Game* game;
 
 void display() {
     game->Render();
+    glutSwapBuffers();
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -18,7 +20,6 @@ void keyboardUp(unsigned char key, int x, int y) {
 }
 
 void idle() {
-    // Update game logic
     static float lastTime = 0.0f;
     float currentTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
     float deltaTime = currentTime - lastTime;
@@ -30,10 +31,7 @@ void idle() {
 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-    glMatrixMode(GL_MODELVIEW);
+    // Projection is handled by shaders, no need for gluOrtho2D
 }
 
 int main(int argc, char** argv) {
@@ -41,6 +39,19 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Space Invader");
+
+    // BẮT BUỘC PHẢI KHỞI TẠO GLEW Ở ĐÂY
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        std::cerr << "GLEW Init Error: " << glewGetErrorString(err) << std::endl;
+        return -1;
+    }
+
+    // Bật blending cho texture có alpha
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     game = new Game();
 
@@ -56,4 +67,4 @@ int main(int argc, char** argv) {
 
     delete game;
     return 0;
-}    
+}

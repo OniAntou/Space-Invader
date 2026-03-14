@@ -5,18 +5,26 @@
             "label": "C/C++: g++.exe build active file",
             "command": "C:/msys64/ucrt64/bin/g++.exe",
             "args": [
-    "-fdiagnostics-color=always",
-    "-g",
-    "${file}",
-    "-o",
-    "${fileDirname}\\${fileBasenameNoExtension}.exe",
-    "-I", "C:/msys64/mingw64/include", // Đường dẫn chứa folder GL/glut.h
-    "-I", "c:\\Users\\USER\\Downloads\\OpenGL_Project\\glm-1.0.3\\glm",
-    "-L", "C:/msys64/mingw64/lib",     // Đường dẫn chứa file .a hoặc .lib
-    "-lfreeglut",
-    "-lopengl32",
-    "-lglu32"
-],
+                "-fdiagnostics-color=always",
+                "-g",
+                "${workspaceFolder}\\main.cpp",
+                "${workspaceFolder}\\game.cpp",
+                "${workspaceFolder}\\resourceManager.cpp",
+                "${workspaceFolder}\\shader.cpp",
+                "${workspaceFolder}\\sprite_renderer.cpp",
+                "-o",
+                "${workspaceFolder}\\main.exe",
+                "-I",
+                "C:/msys64/ucrt64/include",
+                "-I",
+                "${workspaceFolder}/glm-1.0.3/glm",
+                "-L",
+                "C:/msys64/ucrt64/lib",
+                "-lfreeglut",
+                "-lopengl32",
+                "-lglu32",
+                "-lglew32"
+            ],
             "options": {
                 "cwd": "C:/msys64/ucrt64/bin"
             },
